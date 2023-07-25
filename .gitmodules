@@ -1,0 +1,3 @@
+[submodule "stakingReactApp"]
+	path = stakingReactApp
+	url = https://github.com/farhana-k/stakingReactApp.git
