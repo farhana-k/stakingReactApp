@@ -20,11 +20,27 @@ const Home = () => {
         return r;
     }
 
+    //  update stake details
+    const updateStake = () => {  
+        const r1 = Promise.resolve(getStakeDetails());
+        r1.then(value => {
+            setstakes({data: value}); 
+        })  
+    };  
+
     //  check rewards
     const checkRewards = async () => {
         const r = await myContract.methods.calculateRewards(ethereum.selectedAddress).call()
         return r;
     }
+
+    // update rewards
+    const updateReward = () => {  
+        const p = Promise.resolve(checkRewards());
+        p.then(value => {
+            setreward({data: value.toString()}); 
+        })  
+    }; 
 
     //  check estimated APY
     const checkAPY = async () => {
@@ -34,6 +50,16 @@ const Home = () => {
         return r;
     }
 
+    // update APY
+    const updateAPY = () => {  
+        const p = Promise.resolve(checkAPY());
+        p.then(value => {
+            console.log(value)
+            let num =  Number(value) * 365
+            setapy({data: num}); 
+        })  
+    }; 
+
     //  check current block number 
     const checkBlockNumber = async () => {
         const r = await myContract.methods.blockNumber().call()
@@ -41,37 +67,12 @@ const Home = () => {
     }
 
     // update current block number
-    const changeState3 = () => {  
+    const updateBlock = () => {  
         const r1 = Promise.resolve(checkBlockNumber());
         r1.then(value => {
             setblock({data: Number(value)}); 
         })  
     }; 
-
-    // update APY
-    const changeState2 = () => {  
-        const p = Promise.resolve(checkAPY());
-        p.then(value => {
-            let num =  Number(value) * 365
-            setapy({data: num}); 
-        })  
-    }; 
-
-    // update rewards
-    const changeState1 = () => {  
-        const p = Promise.resolve(checkRewards());
-        p.then(value => {
-            setreward({data: value.toString()}); 
-        })  
-    }; 
-
-    //  update stake details
-    const changeState = () => {  
-        const r1 = Promise.resolve(getStakeDetails());
-        r1.then(value => {
-            setstakes({data: value}); 
-        })  
-    };  
 
     //  calls stake function from the contract
     const stake = async() => {
@@ -102,7 +103,7 @@ const Home = () => {
                 <h1 className="stake-details">Check Staking details</h1>
                 { stakes.data && <Stake data = {stakes.data} /> }
                 <Button className="card"
-                    onClick={() => changeState()}
+                    onClick={() => updateStake()}
                     >Check</Button>
                     <br />
             </div>
@@ -117,7 +118,7 @@ const Home = () => {
             <div className="stake-preview">
                 <h1 className="stake-details">Check Rewards</h1>
                 { reward.data && <Balance data = {reward.data} /> }
-                <Button className="card" onClick={() => changeState1()} >Check </Button>
+                <Button className="card" onClick={() => updateReward()} >Check </Button>
             </div>
 
             <div className="stake-preview">
@@ -125,7 +126,7 @@ const Home = () => {
                 <input className="input" type="number" id="amt" placeholder="Amount "/>
                 <br /> <br />
                 { apy.data && <Balance data = {apy.data} /> }
-                <Button className="card" onClick={() => changeState2()} >Check  </Button>
+                <Button className="card" onClick={() => updateAPY()} >Check  </Button>
             </div>
 
             <div className="stake-preview">
@@ -141,7 +142,7 @@ const Home = () => {
             <div className="stake-preview">
                 <h1 className="stake-details">Check current block number</h1>
                 { block.data && <Balance data = {block.data} /> }
-                <Button className="card" onClick={() => changeState3()} >Check  </Button>
+                <Button className="card" onClick={() => updateBlock()} >Check  </Button>
             </div>
 
             <div className="stake-preview">
